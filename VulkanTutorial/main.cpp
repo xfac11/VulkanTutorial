@@ -1,7 +1,8 @@
 #include"BUILD_ORDER.h"
-#include"VulkanPhysicalDevice.h"
+#include"VulkanDevice.h"
 VulkanInstance* instance = nullptr;
 VulkanPhysicalDevice* physicalDevice = nullptr;
+VulkanDevice* device;
 int main()
 {
 	VulkanConfiguration vulkanConfig;
@@ -10,7 +11,14 @@ int main()
 
 	instance = new VulkanInstance(vulkanConfig);
 	physicalDevice = VulkanPhysicalDevice::GetPhysicalDevice(instance);
+	device = new VulkanDevice(instance, physicalDevice);
 
+	VkCommandBuffer* commands = new VkCommandBuffer[3];
+	device->getComputeCommand(commands, 3);
+
+	device->freeComputeCommand(commands, 3);
+
+	delete device;
 	delete physicalDevice;
 	delete instance;
 
